@@ -1,0 +1,180 @@
+!pip install wordcloud
+
+# Import os library for operating system related functions
+import os
+
+# Import pandas library for data handling and analysis
+import pandas as pd
+
+# Import matplotlib library
+import matplotlib
+
+# Import pyplot module for plotting graphs
+import matplotlib.pyplot as plt
+
+# Enable inline plotting in Jupyter Notebook
+%matplotlib inline
+
+# Import WordCloud and STOPWORDS modules
+from wordcloud import WordCloud, STOPWORDS
+
+
+# Import warnings library
+import warnings
+
+# Ignore deprecation warning messages
+warnings.filterwarnings('ignore', category = DeprecationWarning)
+
+
+# Read dataset from CSV file and assign column names
+dataset = pd.read_csv(
+    'data/dataset.csv',
+    names = ['Sentiment', 'Id', 'Date', 'Flag', 'User', 'Tweet']
+)
+
+
+# Display total number of tweets in dataset
+print(
+    "Total tweets in the dataset: {} Million"
+    .format(dataset.shape[0]/1000000.0)
+)
+
+
+# Display dataset information
+dataset.info()
+
+
+# Count number of tweets for each sentiment class
+class_count = dataset['Sentiment'].value_counts()
+
+
+# Set graph figure size
+plt.figure(figsize = (12, 8))
+
+
+# Set x-axis tick labels
+plt.xticks([4, 0], ['Positive', 'Negative'])
+
+# Set x-axis tick positions
+plt.xticks([4,0])
+
+
+# Create bar graph for sentiment counts
+plt.bar(
+    x = class_count.keys(),
+    height = class_count.values,
+    color = ['g', 'r']
+)
+
+
+# Set x-axis label
+plt.xlabel("Tweet sentiment")
+
+# Set y-axis label
+plt.ylabel("Tweet count")
+
+# Set graph title
+plt.title("Count of tweets for each sentiment")
+
+# Display legend
+plt.legend()
+
+
+# Extract month from Date column
+dataset['Month'] = dataset['Date'].apply(
+    lambda date: date.split(' ')[1]
+)
+
+
+# Count tweets for each month
+months_count = dataset['Month'].value_counts()
+
+
+# Set graph figure size
+plt.figure(figsize = (12, 8))
+
+
+# Create bar graph for month-wise tweet count
+plt.bar(
+    ['Jun', 'May', 'Apr'],
+    months_count.values,
+    color = ['b', 'g', 'r']
+)
+
+
+# Display count values on bars
+for i, v in enumerate(months_count.values):
+
+    # Display text labels
+    plt.text(i - 0.1, v + 10000, str(v))
+
+
+# Set x-axis label
+plt.xlabel('Months')
+
+# Set y-axis label
+plt.ylabel('Number of tweets')
+
+# Set graph title
+plt.title('Tweets during months of 2009')
+
+
+# Display first tweet
+print(dataset['Tweet'][0])
+
+# Display second tweet
+print(dataset['Tweet'][1])
+
+
+# Combine all positive tweets into one string
+positive_tweets = ' '.join(
+    dataset[dataset['Sentiment'] == 4]['Tweet'].str.lower()
+)
+
+
+# Combine all negative tweets into one string
+negative_tweets = ' '.join(
+    dataset[dataset['Sentiment'] == 0]['Tweet'].str.lower()
+)
+
+
+# Create positive tweets wordcloud
+wordcloud = WordCloud(
+    stopwords = STOPWORDS,
+    background_color = "white",
+    max_words = 1000
+).generate(positive_tweets)
+
+
+# Set graph figure size
+plt.figure(figsize = (12, 8))
+
+# Display wordcloud image
+plt.imshow(wordcloud)
+
+# Remove axis
+plt.axis("off")
+
+# Set graph title
+plt.title("Positive tweets Wordcloud")
+
+
+# Create negative tweets wordcloud
+wordcloud = WordCloud(
+    stopwords = STOPWORDS,
+    background_color = "white",
+    max_words = 1000
+).generate(negative_tweets)
+
+
+# Set graph figure size
+plt.figure(figsize = (12, 8))
+
+# Display wordcloud image
+plt.imshow(wordcloud)
+
+# Remove axis
+plt.axis("off")
+
+# Set graph title
+plt.title("Negative tweets Wordcloud")
