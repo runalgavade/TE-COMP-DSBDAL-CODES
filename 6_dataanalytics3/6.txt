@@ -1,0 +1,170 @@
+# Import the required libraries
+
+# Import pandas library for data handling and analysis
+import pandas as pd
+
+# Import matplotlib library for plotting graphs
+import matplotlib.pyplot as plt
+
+# Import warnings library
+import warnings
+
+# Ignore warning messages
+warnings.filterwarnings('ignore')
+
+# Ignore simple warnings
+warnings.simplefilter('ignore')
+
+
+# Import the Iris dataset by calling URL and initialising the data frame
+
+# Read Iris dataset directly from online URL
+data = pd.read_csv("https://raw.githubusercontent.com/plotly/datasets/master/iris-data.csv")
+
+# Display shape of dataset (rows and columns)
+data.shape
+
+
+# Display dataset information such as datatype and null values
+data.info()
+
+
+# Display statistical summary of dataset
+data.describe()
+
+
+#Data Preprocessing
+
+# Check for Null Value
+
+# Display total null values in each column
+data.isnull().sum()
+
+
+# Divide the dataset into Independent(X) and Dependent(Y)variables.
+
+# Select feature columns as independent variables
+X = data.drop(['class'], axis=1)
+
+# Select target column as dependent variable
+y = data.drop(['sepal length', 'sepal width', 'petal length', 'petal width'], axis=1)
+
+# Display shape of feature dataset
+print(X.shape)
+
+# Display shape of target dataset
+print(y.shape)
+
+
+# Split the dataset into training and testing datasets
+
+# Import train_test_split function
+from sklearn.model_selection import train_test_split 
+
+# Split dataset into training and testing data
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    shuffle=True
+)
+
+# Display shape of training feature dataset
+print(X_train.shape)
+
+# Display shape of testing feature dataset
+print(X_test.shape)
+
+# Display shape of training target dataset
+print(y_train.shape)
+
+# Display shape of testing target dataset
+print(y_test.shape)
+
+
+# Use Naive Bayes algorithm( Train the Machine ) to Create Model
+
+# import the class
+
+# Import Gaussian Naive Bayes model
+from sklearn.naive_bayes import GaussianNB
+
+# Create Gaussian Naive Bayes object
+model = GaussianNB()
+
+# Train model using training data
+model.fit(X_train, y_train)
+
+
+# Predict the y_pred for all values of train_x and test_x
+
+# Predict output values using testing data
+y_pred = model.predict(X_test)
+
+# Display accuracy score of model
+model.score(X_test,y_test)
+
+
+# Evaluate the performance of Model for train_y and test_y
+
+# Import accuracy score, confusion matrix and confusion matrix display
+from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
+
+# Display accuracy score
+print(accuracy_score(y_test, y_pred))
+
+
+# Calculate the required evaluation parameters
+
+# Calculate confusion matrix
+cm = confusion_matrix(y_test, y_pred)
+
+# Create confusion matrix display object
+disp = ConfusionMatrixDisplay(confusion_matrix = cm)
+
+# Display text heading
+print("Confusion matrix:")
+
+# Display confusion matrix values
+print(cm)
+
+# Plot confusion matrix graph
+disp.plot()
+
+# Display graph
+plt.show()
+
+
+# Define function to extract confusion matrix values
+def get_confusion_matrix_values(y_true, y_pred):
+
+    # Calculate confusion matrix
+    cm = confusion_matrix(y_true, y_pred)
+
+    # Return TP, FP, FN and TN values
+    return(cm[0][0], cm[0][1], cm[1][0], cm[1][1])
+
+# Store TP, FP, FN and TN values
+TP, FP, FN, TN = get_confusion_matrix_values(y_test, y_pred)
+
+# Display True Positive value
+print("TP: ", TP)
+
+# Display False Positive value
+print("FP: ", FP)
+
+# Display False Negative value
+print("FN: ", FN)
+
+# Display True Negative value
+print("TN: ", TN)
+
+
+# Calculate and display Accuracy
+print("The Accuracy is ", (TP+TN)/(TP+TN+FP+FN))
+
+# Calculate and display Precision
+print("The precision is ", TP/(TP+FP))
+
+# Calculate and display Recall
+print("The recall is ", TP/(TP+FN))
