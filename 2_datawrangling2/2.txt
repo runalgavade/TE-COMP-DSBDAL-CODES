@@ -1,0 +1,433 @@
+# ============================================================
+# DATA WRANGLING II
+# Academic Performance Dataset
+# ============================================================
+# Aim:
+# 1. Handle missing values and inconsistencies
+# 2. Detect and treat outliers
+# 3. Apply data transformation
+# ============================================================
+
+
+# ------------------------------------------------------------
+# STEP 1: IMPORT REQUIRED LIBRARIES
+# ------------------------------------------------------------
+
+# Import pandas for data handling and analysis
+import pandas as pd
+
+# Import numpy for numerical operations
+import numpy as np
+
+
+# ------------------------------------------------------------
+# STEP 2: LOAD DATASET
+# ------------------------------------------------------------
+
+# Read CSV dataset into dataframe
+df = pd.read_csv("student_performance.csv")
+
+
+# ------------------------------------------------------------
+# STEP 3: DISPLAY DATASET
+# ------------------------------------------------------------
+
+# Display complete dataset
+df
+
+
+# ------------------------------------------------------------
+# STEP 4: CHECK MISSING VALUES
+# ------------------------------------------------------------
+
+# Check missing values in dataset
+df.isnull()
+
+
+# ------------------------------------------------------------
+# STEP 5: DISPLAY ROWS WITH NULL VALUES
+# ------------------------------------------------------------
+
+# Find rows where math score contains null values
+series = pd.isnull(df["math score"])
+
+# Display rows containing null values
+df[series]
+
+
+# ------------------------------------------------------------
+# STEP 6: CHECK NON-NULL VALUES
+# ------------------------------------------------------------
+
+# Check non-missing values in dataset
+df.notnull()
+
+
+# ------------------------------------------------------------
+# STEP 7: DISPLAY ROWS WITHOUT NULL VALUES
+# ------------------------------------------------------------
+
+# Find rows where math score is not null
+series1 = pd.notnull(df["math score"])
+
+# Display valid rows
+df[series1]
+
+
+# ------------------------------------------------------------
+# STEP 8: IMPORT LABEL ENCODER
+# ------------------------------------------------------------
+
+# Import LabelEncoder for categorical conversion
+from sklearn.preprocessing import LabelEncoder
+
+
+# ------------------------------------------------------------
+# STEP 9: CREATE LABEL ENCODER OBJECT
+# ------------------------------------------------------------
+
+# Create LabelEncoder object
+le = LabelEncoder()
+
+
+# ------------------------------------------------------------
+# STEP 10: CONVERT CATEGORICAL DATA INTO NUMERIC DATA
+# ------------------------------------------------------------
+
+# Convert Gender column into numerical values
+df['Gender'] = le.fit_transform(df['Gender'])
+
+# Store updated dataframe
+newdf = df
+
+
+# ------------------------------------------------------------
+# STEP 11: DISPLAY UPDATED DATAFRAME
+# ------------------------------------------------------------
+
+# Display encoded dataset
+df
+
+
+# ------------------------------------------------------------
+# STEP 12: DEFINE CUSTOM MISSING VALUES
+# ------------------------------------------------------------
+
+# Define custom missing value symbols
+missing_values = ["Na", "na"]
+
+
+# ------------------------------------------------------------
+# STEP 13: READ DATASET WITH CUSTOM NaN VALUES
+# ------------------------------------------------------------
+
+# Read dataset and treat Na/na as NaN
+df = pd.read_csv(
+    "student_performance.csv",
+    na_values=missing_values
+)
+
+
+# ------------------------------------------------------------
+# STEP 14: DISPLAY CLEANED DATASET
+# ------------------------------------------------------------
+
+# Display dataset
+df
+
+
+# ------------------------------------------------------------
+# STEP 15: REPLACE NULL VALUES WITH ZERO
+# ------------------------------------------------------------
+
+# Create reference dataframe
+ndf = df
+
+# Replace null values with 0
+ndf.fillna(0)
+
+
+# ------------------------------------------------------------
+# STEP 16: HANDLE MISSING VALUES USING MEAN
+# ------------------------------------------------------------
+
+# Calculate mean of math score column
+m_v = df['math score'].mean()
+
+# Replace missing values with mean
+df['math score'].fillna(
+    value=m_v,
+    inplace=True
+)
+
+# Display updated dataset
+df
+
+
+# ------------------------------------------------------------
+# STEP 17: REPLACE NaN WITH SPECIFIC VALUE
+# ------------------------------------------------------------
+
+# Replace NaN values with -99
+ndf.replace(
+    to_replace=np.nan,
+    value=-99
+)
+
+
+# ------------------------------------------------------------
+# STEP 18: REMOVE ROWS WITH NULL VALUES
+# ------------------------------------------------------------
+
+# Drop rows containing null values
+ndf.dropna()
+
+
+# ------------------------------------------------------------
+# STEP 19: REMOVE ROWS WITH ALL NULL VALUES
+# ------------------------------------------------------------
+
+# Drop rows where all values are missing
+ndf.dropna(how='all')
+
+
+# ------------------------------------------------------------
+# STEP 20: REMOVE COLUMNS WITH NULL VALUES
+# ------------------------------------------------------------
+
+# Drop columns containing null values
+ndf.dropna(axis=1)
+
+
+# ------------------------------------------------------------
+# STEP 21: REMOVE ROWS HAVING ANY NULL VALUE
+# ------------------------------------------------------------
+
+# Remove rows with any missing value
+new_data = ndf.dropna(
+    axis=0,
+    how='any'
+)
+
+# Display cleaned dataset
+new_data
+
+
+# ============================================================
+# OUTLIER DETECTION AND TREATMENT
+# ============================================================
+
+
+# ------------------------------------------------------------
+# STEP 22: IMPORT REQUIRED LIBRARIES
+# ------------------------------------------------------------
+
+# Import pandas library
+import pandas as pd
+
+# Import numpy library
+import numpy as np
+
+
+# ------------------------------------------------------------
+# STEP 23: LOAD SECOND DATASET
+# ------------------------------------------------------------
+
+# Read dataset containing outliers
+df = pd.read_csv("student_performance1.csv")
+
+
+# ------------------------------------------------------------
+# STEP 24: DISPLAY DATASET
+# ------------------------------------------------------------
+
+# Display dataset
+df
+
+
+# ------------------------------------------------------------
+# STEP 25: IMPORT MATPLOTLIB
+# ------------------------------------------------------------
+
+# Import matplotlib for plotting graphs
+import matplotlib.pyplot as plt
+
+
+# ------------------------------------------------------------
+# STEP 26: SELECT NUMERICAL COLUMNS
+# ------------------------------------------------------------
+
+# Select numerical columns for analysis
+box_df = df[[
+    'math score',
+    'reading score',
+    'writing score',
+    'placement score'
+]]
+
+
+# ------------------------------------------------------------
+# STEP 27: CREATE BOXPLOT
+# ------------------------------------------------------------
+
+# Create boxplot for numerical columns
+ax = box_df.plot(kind='box')
+
+# Display graph
+plt.show()
+
+
+# ------------------------------------------------------------
+# STEP 28: DETECT OUTLIERS USING CONDITIONS
+# ------------------------------------------------------------
+
+# Display indexes where math score is greater than 90
+print(np.where(df['math score'] > 90))
+
+# Display indexes where reading score is less than 25
+print(np.where(df['reading score'] < 25))
+
+# Display indexes where writing score is less than 30
+print(np.where(df['writing score'] < 30))
+
+
+# ------------------------------------------------------------
+# STEP 29: SORT READING SCORES
+# ------------------------------------------------------------
+
+# Sort reading score values
+sorted_rscore = sorted(df['reading score'])
+
+# Display sorted values
+sorted_rscore
+
+
+# ------------------------------------------------------------
+# STEP 30: CALCULATE QUARTILES
+# ------------------------------------------------------------
+
+# Calculate first quartile (Q1)
+q1 = np.percentile(sorted_rscore, 25)
+
+# Calculate third quartile (Q3)
+q3 = np.percentile(sorted_rscore, 75)
+
+# Display quartile values
+print(q1, q3)
+
+
+# ------------------------------------------------------------
+# STEP 31: CALCULATE INTERQUARTILE RANGE
+# ------------------------------------------------------------
+
+# Calculate Interquartile Range
+IQR = q3 - q1
+
+
+# ------------------------------------------------------------
+# STEP 32: CALCULATE LOWER AND UPPER BOUNDS
+# ------------------------------------------------------------
+
+# Calculate lower bound for outliers
+lwr_bound = q1 - (1.5 * IQR)
+
+# Calculate upper bound for outliers
+upr_bound = q3 + (1.5 * IQR)
+
+# Display bounds
+print(lwr_bound, upr_bound)
+
+
+# ------------------------------------------------------------
+# STEP 33: DETECT OUTLIERS USING IQR METHOD
+# ------------------------------------------------------------
+
+# Create empty list for outliers
+r_outliers = []
+
+# Traverse all reading scores
+for i in sorted_rscore:
+
+    # Check whether value is outlier
+    if (i < lwr_bound or i > upr_bound):
+
+        # Append outlier value
+        r_outliers.append(i)
+
+# Display outlier values
+print(r_outliers)
+
+
+# ------------------------------------------------------------
+# STEP 34: CREATE BOXPLOT FOR READING SCORE
+# ------------------------------------------------------------
+
+# Select reading score column
+col = ['reading score']
+
+# Create boxplot
+df.boxplot(column=col)
+
+# Display graph
+plt.show()
+
+
+# ------------------------------------------------------------
+# STEP 35: CALCULATE MEDIAN
+# ------------------------------------------------------------
+
+# Calculate median of reading scores
+median = np.median(sorted_rscore)
+
+# Display median value
+median
+
+
+# ------------------------------------------------------------
+# STEP 36: TREAT OUTLIERS USING MEDIAN REPLACEMENT
+# ------------------------------------------------------------
+
+# Import matplotlib library
+import matplotlib.pyplot as plt
+
+# Create refined dataframe
+refined_df = df
+
+# Replace upper outliers with median
+refined_df['reading score'] = np.where(
+    refined_df['reading score'] > upr_bound,
+    median,
+    refined_df['reading score']
+)
+
+# Replace lower outliers with median
+refined_df['reading score'] = np.where(
+    refined_df['reading score'] < lwr_bound,
+    median,
+    refined_df['reading score']
+)
+
+# Select reading score column
+col = ['reading score']
+
+# Create boxplot after removing outliers
+refined_df.boxplot(column=col)
+
+# Display graph
+plt.show()
+
+
+# ============================================================
+# CONCLUSION
+# ============================================================
+# In this program:
+#
+# 1. Missing values were detected and handled
+# 2. Inconsistencies were removed
+# 3. Categorical data was encoded
+# 4. Outliers were detected using boxplot and IQR
+# 5. Outliers were treated using median replacement
+# 6. Data transformation and preprocessing were completed
+#
+# Hence, Data Wrangling II was performed successfully.
+# ============================================================
