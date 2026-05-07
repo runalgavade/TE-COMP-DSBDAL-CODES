@@ -1,0 +1,319 @@
+# ============================================================
+# DATA WRANGLING I – IRIS DATASET
+# ============================================================
+# Aim:
+# Perform data wrangling operations using Python
+# on the Iris dataset.
+#
+# Operations Performed:
+# 1. Import required libraries
+# 2. Load dataset
+# 3. Explore dataset
+# 4. Check missing values
+# 5. Check dimensions and data types
+# 6. Perform statistical analysis
+# 7. Convert data types
+# 8. Normalize numerical data
+# 9. Convert categorical data into numerical data
+# ============================================================
+
+
+# ------------------------------------------------------------
+# STEP 1: IMPORT REQUIRED LIBRARIES
+# ------------------------------------------------------------
+
+# Import pandas library for data handling and analysis
+import pandas as pd
+
+
+# ------------------------------------------------------------
+# STEP 2: LOAD THE DATASET
+# ------------------------------------------------------------
+
+# Read the CSV file and store it into variable 'df'
+df = pd.read_csv('iris.csv')
+
+# Convert dataset explicitly into DataFrame format
+# (Optional because read_csv already returns a DataFrame)
+df = pd.DataFrame(df)
+
+
+# ------------------------------------------------------------
+# STEP 3: DISPLAY THE DATASET
+# ------------------------------------------------------------
+
+# Display first 5 rows of dataset
+df.head()
+
+# Display last 5 rows of dataset
+df.tail()
+
+# Display first 10 rows
+df.head(10)
+
+# Display 1 random row from dataset
+df.sample()
+
+# Display 5 random rows from dataset
+df.sample(5)
+
+
+# ------------------------------------------------------------
+# STEP 4: DISPLAY COLUMN NAMES
+# ------------------------------------------------------------
+
+# Show all column names in dataset
+df.columns
+
+
+# ------------------------------------------------------------
+# STEP 5: CHECK DIMENSIONS OF DATAFRAME
+# ------------------------------------------------------------
+
+# Display number of rows and columns
+# Output format: (rows, columns)
+df.shape
+
+
+# ------------------------------------------------------------
+# STEP 6: DISPLAY SPECIFIC ROWS
+# ------------------------------------------------------------
+
+# Display rows from index 10 to 20
+# Last index is excluded
+df[10:21]
+
+
+# ------------------------------------------------------------
+# STEP 7: SELECT SPECIFIC COLUMNS
+# ------------------------------------------------------------
+
+# Select only sepal_length and species columns
+specific_data = df[["sepal_length", "species"]]
+
+# Print selected columns
+print(specific_data)
+
+
+# ------------------------------------------------------------
+# STEP 8: ACCESS SPECIFIC ROW USING INDEX
+# ------------------------------------------------------------
+
+# Display row at index 5 using iloc
+# iloc uses integer indexing
+df.iloc[5]
+
+
+# ------------------------------------------------------------
+# STEP 9: FILTER DATA USING CONDITIONS
+# ------------------------------------------------------------
+
+# Display all rows where species is Iris-setosa
+df.loc[df["species"] == "Iris-setosa"]
+
+
+# ------------------------------------------------------------
+# STEP 10: COUNT CATEGORICAL VALUES
+# ------------------------------------------------------------
+
+# Count number of occurrences of each species
+df["species"].value_counts()
+
+
+# ------------------------------------------------------------
+# STEP 11: STATISTICAL OPERATIONS
+# ------------------------------------------------------------
+
+# Calculate sum of sepal_length column
+sep_len_sum = df["sepal_length"].sum()
+
+# Calculate mean (average) of sepal_length column
+sep_len_mean = df["sepal_length"].mean()
+
+# Calculate median value of sepal_length column
+sep_len_median = df["sepal_length"].median()
+
+# Find minimum value of sepal_length column
+sep_len_min = df["sepal_length"].min()
+
+# Find maximum value of sepal_length column
+sep_len_max = df["sepal_length"].max()
+
+
+# ------------------------------------------------------------
+# STEP 12: PRINT STATISTICAL RESULTS
+# ------------------------------------------------------------
+
+# Print heading
+print("Sepal Length Properties:\n")
+
+# Print all calculated statistical values
+print(
+    "Sum: {}, Mean: {}, Median: {}, Min: {}, Max: {}".format(
+        sep_len_sum,
+        sep_len_mean,
+        sep_len_median,
+        sep_len_min,
+        sep_len_max
+    )
+)
+
+
+# ------------------------------------------------------------
+# STEP 13: CHECK FOR MISSING VALUES
+# ------------------------------------------------------------
+
+# Check for null/missing values in dataset
+# Returns True for missing values and False otherwise
+df.isnull()
+
+# Count total missing values column-wise
+df.isnull().sum()
+
+
+# ------------------------------------------------------------
+# STEP 14: INSTALL SCIKIT-LEARN
+# ------------------------------------------------------------
+
+# Install sklearn package inside Jupyter Notebook
+%pip install scikit-learn
+
+
+# ------------------------------------------------------------
+# STEP 15: CHECK DATA TYPES
+# ------------------------------------------------------------
+
+# Display datatype of every column
+df.dtypes
+
+
+# ------------------------------------------------------------
+# STEP 16: DATA TYPE CONVERSION
+# ------------------------------------------------------------
+
+# Convert petal_length column into integer datatype
+df["petal_length"] = df["petal_length"].astype(int)
+
+# Convert petal_length column back into float datatype
+df["petal_length"] = df["petal_length"].astype(float)
+
+
+# ------------------------------------------------------------
+# STEP 17: DISPLAY STATISTICAL SUMMARY
+# ------------------------------------------------------------
+
+# Generate statistical summary of numerical columns
+df.describe()
+
+
+# ------------------------------------------------------------
+# STEP 18: IMPORT PREPROCESSING TOOLS
+# ------------------------------------------------------------
+
+# Import MinMaxScaler for normalization
+# Import LabelEncoder for categorical encoding
+from sklearn.preprocessing import MinMaxScaler, LabelEncoder
+
+
+# ------------------------------------------------------------
+# STEP 19: CREATE MIN-MAX SCALER OBJECT
+# ------------------------------------------------------------
+
+# Create normalization object
+min_max_scaler = MinMaxScaler()
+
+
+# ------------------------------------------------------------
+# STEP 20: SELECT NUMERICAL COLUMNS
+# ------------------------------------------------------------
+
+# Select first 4 columns (numerical features)
+# :
+# means all rows
+# :4
+# means columns from 0 to 3
+x = df.iloc[:, :4]
+
+
+# ------------------------------------------------------------
+# STEP 21: NORMALIZE THE DATA
+# ------------------------------------------------------------
+
+# Fit and transform numerical data
+# Values will be scaled between 0 and 1
+x_scaled = min_max_scaler.fit_transform(x)
+
+
+# ------------------------------------------------------------
+# STEP 22: CONVERT NORMALIZED DATA INTO DATAFRAME
+# ------------------------------------------------------------
+
+# Convert normalized array into DataFrame
+df_normalized = pd.DataFrame(x_scaled)
+
+# Display normalized dataset
+df_normalized
+
+
+# ------------------------------------------------------------
+# STEP 23: LABEL ENCODING
+# ------------------------------------------------------------
+
+# Create LabelEncoder object
+label_encoder = LabelEncoder()
+
+
+# ------------------------------------------------------------
+# STEP 24: CONVERT CATEGORICAL DATA INTO NUMERICAL DATA
+# ------------------------------------------------------------
+
+# Convert species names into numeric labels
+# Example:
+# Iris-setosa -> 0
+# Iris-versicolor -> 1
+# Iris-virginica -> 2
+df["species"] = label_encoder.fit_transform(df["species"])
+
+
+# ------------------------------------------------------------
+# STEP 25: DISPLAY UNIQUE ENCODED VALUES
+# ------------------------------------------------------------
+
+# Display unique numerical values after encoding
+df["species"].unique()
+
+
+# ------------------------------------------------------------
+# STEP 26: MERGE NORMALIZED AND ENCODED DATA
+# ------------------------------------------------------------
+
+# Concatenate species column with normalized dataset
+# axis=1 means column-wise merging
+merged_df = pd.concat([df["species"], df_normalized], axis=1)
+
+
+# ------------------------------------------------------------
+# STEP 27: DISPLAY FINAL DATAFRAME
+# ------------------------------------------------------------
+
+# Display first 5 rows of final processed dataset
+merged_df.head()
+
+
+# ============================================================
+# CONCLUSION
+# ============================================================
+# In this program:
+#
+# 1. Iris dataset was loaded successfully
+# 2. Dataset structure was explored
+# 3. Missing values were checked
+# 4. Statistical operations were performed
+# 5. Data types were verified and converted
+# 6. Numerical data was normalized
+# 7. Categorical data was encoded into numerical form
+# 8. Final processed dataset was prepared successfully
+#
+# Hence, Data Wrangling and Preprocessing operations
+# were completed successfully.
+# ============================================================
