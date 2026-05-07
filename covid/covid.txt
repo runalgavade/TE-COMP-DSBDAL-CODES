@@ -1,0 +1,94 @@
+# Import numpy library for numerical calculations
+import numpy as np 
+
+# Import pandas library for data handling and analysis
+import pandas as pd
+
+# Import seaborn library for visualization
+import seaborn as sns
+
+# Import matplotlib library for plotting graphs
+import matplotlib.pyplot as plt
+
+
+# Read COVID vaccine dataset CSV file
+data = pd.read_csv("covid_vaccine_statewise.csv")
+
+
+# Display dataset information such as datatype and non-null values
+data.info()
+
+# Display shape of dataset (rows and columns)
+data.shape
+
+
+# Display statistical summary of numeric columns
+data.describe()
+
+
+# Display statistical summary of categorical/object columns
+data.describe(include='object')
+
+
+# Check total missing values in each column
+data.isnull().sum()
+
+# Calculate average of First Dose Administered column
+avg_firstdose = data["First Dose Administered"].astype("float").mean(axis = 0)
+
+# Display average first dose value
+print("Average of First Dose:", avg_firstdose)
+
+# Replace missing values in First Dose Administered column
+# using average value
+data["First Dose Administered"].fillna(
+    value = avg_firstdose,
+    inplace=True
+)
+
+
+# Calculate average of Second Dose Administered column
+avg_seconddose = data["Second Dose Administered"].astype("float").mean(axis = 0)
+
+# Display average second dose value
+print("Average of Second Dose:", avg_seconddose)
+
+# Replace missing values in Second Dose Administered column
+# using average value
+data["Second Dose Administered"].fillna(
+    value = avg_seconddose,
+    inplace = True
+)
+
+
+# Group dataset state-wise and calculate total first dose administered
+first_dose = data.groupby('State')[['First Dose Administered']].sum()
+
+# Display state-wise first dose values
+first_dose
+
+
+# Group dataset state-wise and calculate total second dose administered
+first_dose = data.groupby('State')[['Second Dose Administered']].sum()
+
+# Display state-wise second dose values
+first_dose
+
+# Calculate total vaccinated male individuals
+male = data["Male(Individuals Vaccinated)"].sum()
+
+# Display total male vaccinated count
+print(
+    "The total number of male individuals vaccinated are",
+    int(male)
+)
+
+
+# Calculate total vaccinated female individuals
+female = data["Female(Individuals Vaccinated)"].sum()
+
+# Display total female vaccinated count
+print(
+    "The total number of female individuals vaccinated are",
+    int(female)
+)
