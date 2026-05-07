@@ -1,0 +1,214 @@
+# ============================================================
+# DESCRIPTIVE STATISTICS
+# Measures of Central Tendency and Variability
+# ============================================================
+
+# ------------------------------------------------------------
+# STEP 1: IMPORT REQUIRED LIBRARIES
+# ------------------------------------------------------------
+
+# Import pandas library for data handling
+import pandas as pd
+
+# Import numpy library for numerical calculations
+import numpy as np
+
+
+# ------------------------------------------------------------
+# STEP 2: LOAD STUDENT PERFORMANCE DATASET
+# ------------------------------------------------------------
+
+# Read student performance dataset CSV file
+df = pd.read_csv('student_performance1.csv')
+
+
+# ------------------------------------------------------------
+# STEP 3: DISPLAY FIRST 5 ROWS
+# ------------------------------------------------------------
+
+# Display first 5 rows of dataset
+df.head()
+
+
+# ------------------------------------------------------------
+# STEP 4: CALCULATE MEAN
+# ------------------------------------------------------------
+
+# Calculate mean of all numerical columns
+df.mean()
+
+# Calculate mean of math score column
+df.loc[:, 'math score'].mean()
+
+# Calculate row-wise mean for first 4 rows
+df.mean(axis=1)[0:4]
+
+
+# ------------------------------------------------------------
+# STEP 5: CALCULATE MEDIAN
+# ------------------------------------------------------------
+
+# Calculate median of all numerical columns
+df.median()
+
+# Calculate row-wise median for first 4 rows
+df.median(axis=1)[0:4]
+
+
+# ------------------------------------------------------------
+# STEP 6: CALCULATE MODE
+# ------------------------------------------------------------
+
+# Calculate mode of dataset
+df.mode()
+
+# Calculate mode of math score column
+df.loc[:,'math score'].mode()
+
+
+# ------------------------------------------------------------
+# STEP 7: FIND MINIMUM VALUES
+# ------------------------------------------------------------
+
+# Display minimum values of all columns
+df.min()
+
+# Display minimum value of math score column
+df.loc[:,'math score'].min(skipna = False)
+
+
+# ------------------------------------------------------------
+# STEP 8: FIND MAXIMUM VALUES
+# ------------------------------------------------------------
+
+# Display maximum values of all columns
+df.max()
+
+# Display maximum value of math score column
+df.loc[:,'math score'].max(skipna = False)
+
+
+# ------------------------------------------------------------
+# STEP 9: CALCULATE STANDARD DEVIATION
+# ------------------------------------------------------------
+
+# Calculate standard deviation of all numerical columns
+df.std()
+
+# Calculate standard deviation of reading score column
+df.loc[:,'reading score'].std()
+
+# Calculate row-wise standard deviation for first 4 rows
+df.std(axis=1)[0:4]
+
+
+# ------------------------------------------------------------
+# STEP 10: GROUP DATA USING CATEGORICAL VARIABLES
+# ------------------------------------------------------------
+
+# Group dataset by club join year and calculate average placement score
+df.groupby(['club join year'])['placement score'].mean()
+
+# Group dataset by reading score and calculate average placement offer count
+df.groupby(['reading score'])['placement offer count'].mean()
+
+
+# ------------------------------------------------------------
+# STEP 11: PERFORM ONE-HOT ENCODING
+# ------------------------------------------------------------
+
+# Import preprocessing module from sklearn
+from sklearn import preprocessing
+
+# Create OneHotEncoder object
+enc = preprocessing.OneHotEncoder()
+
+# Perform one-hot encoding on reading score column
+enc_df = pd.DataFrame(enc.fit_transform(df[['reading score']]).toarray())
+
+# Display first 5 rows of encoded dataframe
+enc_df.head()
+
+
+# ------------------------------------------------------------
+# STEP 12: MERGE ORIGINAL AND ENCODED DATA
+# ------------------------------------------------------------
+
+# Join original dataset with encoded dataframe
+df_encode =df.join(enc_df)
+
+# Display first 5 rows of updated dataframe
+df_encode.head()
+
+
+# ============================================================
+# IRIS DATASET ANALYSIS
+# ============================================================
+
+# ------------------------------------------------------------
+# STEP 13: LOAD IRIS DATASET
+# ------------------------------------------------------------
+
+# Read iris dataset CSV file
+csv_url = pd.read_csv('iris.csv')
+
+
+# ------------------------------------------------------------
+# STEP 14: FILTER IRIS-SETOSA SPECIES
+# ------------------------------------------------------------
+
+# Filter rows where species is setosa
+#iris = pd.read_csv(csv_url, names = col_names)
+irisSet = (csv_url['species']=='setosa')
+
+# Display boolean values for setosa filter
+print(irisSet)
+
+# Display descriptive statistics of setosa species
+print(csv_url[irisSet].describe())
+
+
+# ------------------------------------------------------------
+# STEP 15: FILTER IRIS-VERSICOLOR SPECIES
+# ------------------------------------------------------------
+
+# Filter rows where species is versicolor
+irisVer = (csv_url['species']== 'versicolor')
+
+# Display descriptive statistics of versicolor species
+print(csv_url[irisVer].describe())
+
+
+# ------------------------------------------------------------
+# STEP 16: FILTER IRIS-VIRGINICA SPECIES
+# ------------------------------------------------------------
+
+# Filter rows where species is virginica
+irisVir = (csv_url['species']=='virginica')
+
+# Display descriptive statistics of virginica species
+print(csv_url[irisVir].describe())
+
+
+# ============================================================
+# CONCLUSION
+# ============================================================
+# In this program:
+#
+# 1. Mean, median, mode, min, max and standard deviation
+#    were calculated.
+#
+# 2. Grouped statistical analysis was performed using
+#    categorical variables.
+#
+# 3. One-hot encoding transformation was applied.
+#
+# 4. Iris dataset descriptive statistics were calculated
+#    separately for:
+#       - setosa
+#       - versicolor
+#       - virginica
+#
+# Hence, Measures of Central Tendency and Variability
+# were successfully implemented.
+# ============================================================
