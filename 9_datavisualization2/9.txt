@@ -1,0 +1,90 @@
+# importing required library
+
+# Import pandas library for data handling and analysis
+import pandas as pd
+
+# Import numpy library for numerical calculations
+import numpy as np
+
+# Import seaborn library for statistical visualization
+import seaborn as sns
+
+# Import matplotlib library for plotting graphs
+import matplotlib.pyplot as plt
+
+
+# loading dataset
+
+# Read Titanic dataset from online URL
+data = pd.read_csv('https://raw.githubusercontent.com/dphi-official/Datasets/master/titanic_data.csv')
+
+# Display first 5 rows of dataset
+data.head()
+
+
+# Display statistical summary of numeric columns
+data.describe()
+
+
+# Display dataset information such as datatype and null values
+data.info()
+
+
+# Check total missing values in each column
+data.isnull().sum()
+
+
+# Fill missing Age values with mean of Age column
+data['Age'] = data['Age'].fillna(np.mean(data['Age']))
+
+# Fill missing Cabin values with mode of Cabin column
+data['Cabin'] = data['Cabin'].fillna(data['Cabin'].mode()[0])
+
+# Fill missing Embarked values with mode of Embarked column
+data['Embarked'] = data['Embarked'].fillna(data['Embarked'].mode()[0])
+
+# Check missing values again after preprocessing
+data.isnull().sum()
+
+
+# Create boxplot for Age distribution with respect to Gender and Survival
+sns.boxplot(
+    x='Sex',
+    y='Age',
+    hue='Survived',
+    data=data,
+    palette='Set2'
+)
+
+# Set title of graph
+plt.title('Distribution of Age with Respect to Gender and Survival')
+
+# Display graph
+plt.show()
+
+Observations / Inference
+
+
+Female passengers had a higher survival rate compared to male passengers, as more female entries belong to the survived category.
+
+
+Male passengers show a wider distribution of age, indicating that males of almost all age groups were present on the Titanic.
+
+
+The median age of female survivors appears lower than that of male survivors, suggesting that younger females had better survival chances.
+
+
+Several outliers are visible in both male and female categories, indicating the presence of passengers with unusually high ages.
+
+
+Non-surviving male passengers are greater in number compared to surviving male passengers.
+
+
+The age distribution of surviving females is more compact, showing less variation compared to males.
+
+
+Children and younger passengers appear to have relatively better survival chances compared to older passengers.
+
+
+The boxplot indicates that gender and age both influenced the survival probability of passengers on the Titanic.
+
