@@ -1,0 +1,298 @@
+# Import pandas library for data handling and dataframe creation
+import pandas as pd 
+
+# Import nltk library for Natural Language Processing tasks
+import nltk 
+
+# Import math library for mathematical calculations
+import math 
+
+# Import stopwords corpus from nltk
+from nltk.corpus import stopwords 
+
+# Import stemming and lemmatization classes
+from nltk.stem import PorterStemmer, LancasterStemmer, WordNetLemmatizer 
+
+# Import tokenization functions
+from nltk.tokenize import word_tokenize, sent_tokenize
+
+# Download universal tagset for POS tagging
+nltk.download("universal_tagset") 
+
+# Download punkt tokenizer
+nltk.download("punkt") 
+
+# Download stopwords dataset
+nltk.download("stopwords") 
+
+# Download punkt_tab tokenizer support
+nltk.download('punkt_tab') 
+
+# Download wordnet dataset for lemmatization
+nltk.download("wordnet") 
+
+# Download averaged perceptron tagger for POS tagging
+nltk.download("averaged_perceptron_tagger_eng")
+
+# Create sample text document
+text = """Scarlett O'Hara was not beautiful, but men seldom realized it when caught by her charm as the Tarleton twins were. In her face were too sharply blended the delicate features of her mother, a Coast aristocrat of French descent, and the heavy ones of her florid Irish father. But it was an arresting face, pointed of chin, square of jaw. Her eyes were pale green without a touch of hazel, starred with bristly black lashes and slightly tilted at the ends. Above them, her thick black brows slanted upward, cutting a startling oblique line in her magnolia-white skin--that skin so prized by Southern women and so carefully guarded with bonnets, veils and mittens against hot Georgia suns.""" 
+print(text) 
+
+# Perform word tokenization on text
+tokenized_text = nltk.word_tokenize(text) 
+
+# Display tokenized words
+print("Tokenized Text:", tokenized_text)
+
+
+# Perform sentence tokenization on text
+tokenized_sent = nltk.sent_tokenize(text) 
+
+# Display tokenized sentences
+print("Tokenized Sentences:", tokenized_sent) 
+
+# Tokenize each sentence into words
+words = [nltk.word_tokenize(i) for i in nltk.sent_tokenize(text)] 
+
+# Perform POS tagging using universal tagset
+pos_tag = [nltk.pos_tag(i, tagset="universal") for i in words] 
+
+# Display POS tagged words
+print("POS Tagging:", pos_tag) 
+
+# Load English stopwords into a set
+to_be_removed = set(stopwords.words("english")) 
+
+# Remove stopwords from tokenized text
+stopWordsRemovedList = [
+    word for word in tokenized_text
+    if word.lower() not in to_be_removed
+] 
+
+# Display text after removing stopwords
+print("Stop Words Removed:", stopWordsRemovedList)
+
+# Create Porter Stemmer object
+stemmerPort = PorterStemmer() 
+
+# Apply Porter stemming on tokenized words
+portStemmedWords = [
+    stemmerPort.stem(i)
+    for i in tokenized_text
+] 
+
+# Display Porter stemmed words
+print("Porter Stemmed Words:", portStemmedWords) 
+
+# Create Lancaster Stemmer object
+stemmerLan = LancasterStemmer() 
+
+# Apply Lancaster stemming on tokenized words
+lanStemmedWords = [
+    stemmerLan.stem(i)
+    for i in tokenized_text
+] 
+
+# Display Lancaster stemmed words
+print("Lancaster Stemmed Words:", lanStemmedWords)
+
+# Create WordNet Lemmatizer object
+lemmatizer = WordNetLemmatizer() 
+
+# Apply lemmatization on tokenized words
+lemmatizedWords = [
+    lemmatizer.lemmatize(i)
+    for i in tokenized_text
+] 
+
+# Display lemmatized words
+print("Lemmatized Words:", lemmatizedWords)
+
+# Store original text as first sentence
+sent_1 = text 
+
+# Create second sample sentence
+sent_2 = "Seated with Stuart and Brent Tarleton in the cool shade of the porch of Tara, her father’s plantation, that bright April afternoon of 1861, she made a pretty picture." 
+
+# Create third sample sentence
+sent_3 = "On either side of her, the twins lounged easily in their chairs, squinting at the sunlight through tall mint-garnished glasses as they laughed and talked." 
+
+# Perform word tokenization on first sentence
+tk_sent_1 = nltk.word_tokenize(sent_1) 
+
+# Perform word tokenization on second sentence
+tk_sent_2 = nltk.word_tokenize(sent_2) 
+
+# Perform word tokenization on third sentence
+tk_sent_3 = nltk.word_tokenize(sent_3) 
+
+
+# Remove stopwords from first sentence
+tk_sent_1 = [
+    word for word in tk_sent_1
+    if word.lower() not in to_be_removed
+] 
+
+# Remove stopwords from second sentence
+tk_sent_2 = [
+    word for word in tk_sent_2
+    if word.lower() not in to_be_removed
+] 
+
+# Remove stopwords from third sentence
+tk_sent_3 = [
+    word for word in tk_sent_3
+    if word.lower() not in to_be_removed
+]
+
+# Define function to compute Term Frequency
+def computeTF(wordDict, doc):
+
+    # Create empty dictionary for TF values
+    tfDict = {}
+
+    # Calculate total number of words in document
+    corpusCount = len(doc)
+
+    # Calculate TF value for each word
+    for word, count in wordDict.items():
+
+        # Compute TF using formula:
+        # TF = Word Count / Total Words
+        tfDict[word] = count / float(corpusCount)
+
+    # Return TF dictionary
+    return tfDict
+ 
+# Create dictionary for first sentence with initial count 0
+wordDict_1 = dict.fromkeys(tk_sent_1, 0) 
+
+# Count word frequency in first sentence
+for word in tk_sent_1:
+    wordDict_1[word] += 1 
+
+
+# Create dictionary for second sentence with initial count 0
+wordDict_2 = dict.fromkeys(tk_sent_2, 0) 
+
+# Count word frequency in second sentence
+for word in tk_sent_2:
+    wordDict_2[word] += 1 
+
+
+# Create dictionary for third sentence with initial count 0
+wordDict_3 = dict.fromkeys(tk_sent_3, 0) 
+
+# Count word frequency in third sentence
+for word in tk_sent_3:
+    wordDict_3[word] += 1
+ 
+# Calculate TF values for first sentence
+tfFirst = computeTF(wordDict_1, tk_sent_1) 
+
+# Calculate TF values for second sentence
+tfSecond = computeTF(wordDict_2, tk_sent_2) 
+
+# Calculate TF values for third sentence
+tfThird = computeTF(wordDict_3, tk_sent_3)
+
+# Convert to DataFrame for Visualization 
+tf = pd.DataFrame([tfFirst, tfSecond, tfThird]) 
+print(tf)
+
+# Define function to compute Inverse Document Frequency
+def computeIDF(docList):
+
+    # Create empty dictionary for IDF values
+    idfDict = {}
+
+    # Calculate total number of documents
+    N = len(docList)
+
+    # Initialize idfDict with all words     
+    idfDict = dict.fromkeys(all_words, 0)
+    
+# Define function to compute Inverse Document Frequency
+def computeIDF(docList):
+
+    # Create empty dictionary for IDF values
+    idfDict = {}
+
+    # Calculate total number of documents
+    N = len(docList) 
+    
+    # Collect all unique words from all documents     
+    all_words = set()     
+
+    # Traverse each document
+    for doc in docList:
+
+        # Add words into all_words set
+        all_words.update(doc.keys())
+    
+    # Initialize IDF dictionary with all unique words     
+    idfDict = dict.fromkeys(all_words, 0)
+        
+    # Compute document frequency for each word     
+    for doc in docList:         
+
+        # Traverse each word in document
+        for word in doc:             
+
+            # Check whether word exists in document
+            if doc[word] > 0:                 
+
+                # Increase document frequency count
+                idfDict[word] += 1      
+
+    # Compute IDF values     
+    for word in idfDict:         
+
+        # Apply IDF formula
+        idfDict[word] = math.log10(
+            N / (float(idfDict[word]) + 1)
+        )      
+
+    # Return IDF dictionary
+    return idfDict
+    
+# Calculate IDF values for all documents
+idfs = computeIDF([
+    wordDict_1,
+    wordDict_2,
+    wordDict_3
+])
+
+# Define function to compute TF-IDF values
+def computeTFIDF(tfBow, idfs):
+
+    # Create empty dictionary for TF-IDF
+    tfidf = {}     
+
+    # Traverse each word and TF value
+    for word, val in tfBow.items():         
+
+        # Calculate TF-IDF value
+        tfidf[word] = val * idfs.get(word, 0)     
+
+    # Return TF-IDF dictionary
+    return tfidf
+   
+# Calculate TF-IDF values for first document
+idfFirst = computeTFIDF(tfFirst, idfs) 
+
+# Calculate TF-IDF values for second document
+idfSecond = computeTFIDF(tfSecond, idfs) 
+
+# Calculate TF-IDF values for third document
+idfThird = computeTFIDF(tfThird, idfs) 
+
+# Convert TF-IDF dictionaries into DataFrame
+idf_df = pd.DataFrame([
+    idfFirst,
+    idfSecond,
+    idfThird
+]) 
+
+# Display TF-IDF table
+print(idf_df)
