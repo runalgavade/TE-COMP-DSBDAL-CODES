@@ -1,0 +1,221 @@
+# Import numpy library for numerical calculations
+import numpy as np
+
+# Import pandas library for data handling and analysis
+import pandas as pd
+
+# Import matplotlib library for plotting graphs
+import matplotlib.pyplot as plt
+
+# Import seaborn library for statistical visualization
+import seaborn as sns
+
+
+# Read Titanic dataset from online URL
+data = pd.read_csv('https://raw.githubusercontent.com/dphi-official/Datasets/master/titanic_data.csv')
+
+# Display complete dataset
+data
+
+
+# Display shape of dataset (rows and columns)
+data.shape
+
+
+# Display statistical summary of numeric columns
+data.describe()
+
+
+# Display statistical summary of categorical/object columns
+data.describe(include = 'object')
+
+
+# Check total missing values in each column
+data.isnull().sum()
+
+
+# Fill missing Age values with mean of Age column
+data['Age'] = data['Age'].fillna(np.mean(data['Age']))
+
+# Fill missing Cabin values with mode of Cabin column
+data['Cabin'] = data['Cabin'].fillna(data['Cabin'].mode()[0])
+
+# Fill missing Embarked values with mode of Embarked column
+data['Embarked'] = data['Embarked'].fillna(data['Embarked'].mode()[0])
+
+# Check missing values again after preprocessing
+data.isnull().sum()
+
+
+# Convert Survived column datatype into integer
+data['Survived'] = data['Survived'].astype(int)
+
+# Plot countplot for Survived column
+sns.countplot(x=data['Survived'])
+
+# Display graph
+plt.show()
+
+
+# Plot countplot for Passenger Class
+sns.countplot(x=data['Pclass'])
+
+# Display graph
+plt.show()
+
+
+# Plot countplot for Embarked column
+sns.countplot(x=data['Embarked'])
+
+# Display graph
+plt.show()
+
+
+# Plot countplot for Sex column
+sns.countplot(x=data['Sex'])
+
+# Display graph
+plt.show()
+
+
+# Plot boxplot for Age column
+sns.boxplot(x=data['Age'])
+
+# Display graph
+plt.show()
+
+
+# Plot boxplot for Fare column
+sns.boxplot(x=data['Fare'])
+
+# Display graph
+plt.show()
+
+
+# Plot boxplot for Passenger Class column
+sns.boxplot(x=data['Pclass'])
+
+# Display graph
+plt.show()
+
+
+# Plot boxplot for SibSp column
+sns.boxplot(x=data['SibSp'])
+
+# Display graph
+plt.show()
+
+
+# Create categorical boxplot between Passenger Class and Age
+sns.catplot(x= 'Pclass', y = 'Age', data=data, kind = 'box')
+
+
+# Create strip plot between Passenger Class and Fare
+sns.catplot(
+    x='Pclass',
+    y='Fare',
+    hue='Pclass',
+    data=data,
+    kind='strip',
+    palette='deep'
+)
+
+# Display graph
+plt.show()
+
+
+# Create strip plot between Sex and Fare
+sns.catplot(
+    x='Sex',
+    y='Fare',
+    hue='Sex',
+    data=data,
+    kind='strip',
+    palette='deep'
+)
+
+# Display graph
+plt.show()
+
+
+# Create strip plot between Sex and Age
+sns.catplot(
+    x= 'Sex',
+    y = 'Age',
+    hue='Sex',
+    data=data,
+    kind = 'strip',
+    palette='deep'
+)
+
+# Display graph
+plt.show()
+
+
+# Create pairplot for all dataset features
+sns.pairplot(data)
+
+
+# Create scatterplot between Fare and Passenger Class
+sns.scatterplot(
+    x = 'Fare',
+    y = 'Pclass',
+    hue = 'Survived',
+    data = data
+)
+
+
+# Create scatterplot between Survived and Fare
+sns.scatterplot(
+    x = 'Survived',
+    y = 'Fare',
+    data = data
+)
+
+
+# Plot distribution graph for Age column
+sns.distplot(data['Age'])
+
+
+# Plot distribution graph for Fare column
+sns.distplot(data['Fare'])
+
+
+# Create jointplot between Survived and Fare
+sns.jointplot(
+    x = "Survived",
+    y = "Fare",
+    kind = "scatter",
+    data = data
+)
+
+
+# Select only numeric columns from dataset
+numeric_columns = data.select_dtypes(include=[np.number]).columns
+
+
+# Filter dataframe to keep only numeric columns
+df_numeric = data[numeric_columns]
+
+
+# Calculate correlation matrix
+tc = df_numeric.corr()
+
+
+# Plot heatmap for correlation matrix
+sns.heatmap(tc, cmap="YlGnBu")
+
+
+# Set title of heatmap
+plt.title('Correlation')
+
+
+# Create bar plot between Passenger Class and Fare
+sns.catplot(x='Pclass', y='Fare', data=data, kind='bar')
+
+
+# Plot histogram for Fare column
+sns.histplot(data['Fare'])
+
+# Display histogram
+plt.show()
