@@ -1,0 +1,195 @@
+
+# Import pandas library for data handling and analysis
+import pandas as pd
+
+# Import numpy library for numerical operations
+import numpy as np
+
+# Import matplotlib library for plotting graphs
+import matplotlib.pyplot as plt
+
+# Import seaborn library for statistical visualization
+import seaborn as sns
+
+# Display plots inside Jupyter notebook
+%matplotlib inline
+
+# loading the dataset and initialising dataframe
+
+# Read Social Network Ads dataset CSV file
+df= pd.read_csv('Social_Network_Ads.csv')
+
+# Display shape of dataset (rows and columns)
+df.shape
+
+# Display first 5 rows of dataset
+df.head()
+
+# Display datatype of each column
+df.dtypes
+
+# Perform Data Preprocessing
+
+# Check missing values in dataset
+df.isnull().sum()
+
+# Display statistical summary of dataset
+df.describe()
+
+# Create categorical bar plot between Gender and Purchased columns
+g = sns.catplot(x = "Gender",y = "Purchased",data = df,kind = "bar",height = 4)
+
+# Set y-axis label
+g.set_ylabels("Purchased Probability")
+
+# Display graph
+plt.show
+
+# Create cross-tabulation between Gender and Purchased columns
+M2 = pd.crosstab(df.Gender, df.Purchased, normalize='index')
+
+# Display cross-tabulation table
+print(M2)
+
+# Plot stacked bar graph
+M2.plot.bar(figsize=(6,4),stacked=True)
+
+# Display legend on graph
+plt.legend(title='Gender vs Purchased', loc='upper right')
+
+# Display graph
+plt.show()
+
+# Select only numeric columns from dataset
+numeric_columns = df.select_dtypes(include=[np.number]).columns  # Select numeric columns
+
+# Filter the DataFrame to include only numeric columns
+df_numeric = df[numeric_columns]
+
+# Calculate correlation matrix
+corr = df_numeric.corr()
+
+# Display shape of correlation matrix
+print(corr.shape)
+
+# Set figure size
+plt.figure(figsize=(8,8))
+
+# Create heatmap for correlation matrix
+sns.heatmap(corr, cbar=True, square= True, fmt='.1f', annot=True, annot_kws={'size':15})
+
+# Divide the dataset into Independent(X) and Dependent(Y)variables
+
+# Select independent variables/features
+X=df.drop(['Gender','Purchased'],axis=1)
+
+# Select dependent/target variable
+Y= df['Purchased']
+
+# Display first 5 rows of feature dataset
+X.head()
+
+# Split the dataset into training and testing datasets
+
+# Import train_test_split function
+from sklearn.model_selection import train_test_split
+
+# Shuffle and split the data into training and testing subsets
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state = 42)
+
+# import the class
+
+# Import Logistic Regression model
+from sklearn.linear_model import LogisticRegression
+
+# instantiate the model (using the default parameters)
+
+# Create Logistic Regression object
+basemodel= LogisticRegression()
+
+# fit the model with data
+
+# Train Logistic Regression model using training data
+basemodel.fit(X_train,y_train)
+
+# Display training accuracy
+print("Training accuracy:", basemodel.score(X_train,y_train)*100)
+
+# Predict output values using testing data
+y_predict= basemodel.predict(X_test)
+
+# Display testing accuracy
+print("Testing accuracy:", basemodel.score(X_test,y_test)*100)
+
+# Measure performance of model
+
+# Import accuracy score metric
+from sklearn.metrics import accuracy_score
+
+# Calculate accuracy score
+Acc=accuracy_score(y_test,y_predict)
+
+# Display accuracy score
+print(Acc)
+
+# Import confusion matrix metric
+from sklearn.metrics import confusion_matrix
+
+# Calculate confusion matrix
+cm= confusion_matrix(y_test,y_predict)
+
+# Display confusion matrix
+print(cm)
+
+# Calculate the required evaluation parameters
+
+# Import precision, recall, fscore and support metrics
+from sklearn.metrics import precision_recall_fscore_support
+
+# Calculate precision, recall, fscore and support values
+prf= precision_recall_fscore_support(y_test,y_predict)
+
+# Display precision values
+print('precision:',prf[0])
+
+# Display recall values
+print('Recall:',prf[1])
+
+# Display fscore values
+print('fscore:',prf[2])
+
+# Display support values
+print('support:',prf[3])
+
+# Classification report
+
+# Import classification report metric
+from sklearn.metrics import classification_report
+
+# Generate classification report
+cr= classification_report(y_test,y_predict)
+
+# Display classification report
+print(cr)
+
+# Extract TP, TN, FP, FN values
+TN, FP, FN, TP = cm.ravel()
+
+# Display True Positive value
+print("True Positive:", TP)
+
+# Display True Negative value
+print("True Negative:", TN)
+
+# Display False Positive value
+print("False Positive:", FP)
+
+# Display False Negative value
+print("False Negative:", FN)
+
+# Calculate Error Rate
+error_rate = (FP + FN) / (TP + TN + FP + FN)
+
+# Display Error Rate
+print("Error Rate:", error_rate)
+
